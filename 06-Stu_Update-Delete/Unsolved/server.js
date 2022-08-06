@@ -1,7 +1,7 @@
-const express = require('express');
-const mongodb = require('mongodb').MongoClient;
+const express = require("express");
+const mongodb = require("mongodb").MongoClient;
 // We import the ObjectId() function from MongoDB
-const ObjectId = require('mongodb').ObjectId;
+const ObjectId = require("mongodb").ObjectId;
 
 const app = express();
 const port = 3001;
@@ -23,9 +23,9 @@ mongodb.connect(
 
 app.use(express.json());
 
-app.post('/create', (req, res) => {
+app.post("/create", (req, res) => {
   // The title and author will be provided by the request body
-  db.collection('bookCollection').insertOne(
+  db.collection("bookCollection").insertOne(
     { title: req.body.title, author: req.body.author },
     (err, results) => {
       if (err) throw err;
@@ -34,8 +34,8 @@ app.post('/create', (req, res) => {
   );
 });
 
-app.get('/read', (req, res) => {
-  db.collection('bookCollection')
+app.get("/read", (req, res) => {
+  db.collection("bookCollection")
     .find()
     .toArray((err, results) => {
       if (err) throw err;
@@ -44,3 +44,13 @@ app.get('/read', (req, res) => {
 });
 
 // TODO: Add Delete route that uses a filter to delete a single document by id
+
+app.delete("/delete", (req, res) => {
+  db.collection("bookCollection").deleteOne(
+    { _id: ObjectId(req.body.id) },
+    (err) => {
+      if (err) throw err;
+      res.send("Document deleted");
+    }
+  );
+});
